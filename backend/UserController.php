@@ -4,7 +4,17 @@
 $message = '';
 
 $validatedData = true;
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST" ) {
+
+    if($_SESSION['token'] != $_REQUEST["csrf"]) {
+
+        echo $_REQUEST['csrf'];
+        echo '<br>';
+        echo $_SESSION['token'];
+         $validatedData = false;
+         $message = "Invalid Token 405";
+         return;
+    }
     if(empty($_REQUEST['first_name'] )) {
         $validatedData = false;
     }

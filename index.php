@@ -1,4 +1,10 @@
 <?php 
+
+    session_start();
+    if(! isset($_SESSION["token"])) {
+        $_SESSION["token"] = bin2hex(random_bytes(32));
+    }
+
     require_once('./db/connection.php');
     require_once('./backend/UserController.php')
 ?>
@@ -17,8 +23,8 @@
                 if($_SERVER["REQUEST_METHOD"] == "POST" && $message == "success")
                 {
                     echo '<span class="text-success d-block"><b> Saved Successfully !! </b></span>';
-                } else if($_SERVER["REQUEST_METHOD"] == "POST" && $message == "failed") {
-                    echo '<span class="text-danger d-block"><b> Something Went Wrong !! </b></span>';
+                } else if($_SERVER["REQUEST_METHOD"] == "POST") {
+                    echo '<span class="text-danger d-block"><b> '. $message .' </b></span>';
                 }
             ?>
             <div class="title">
@@ -27,6 +33,7 @@
                 </h4>
             </div>
             <form class="form" method="post"  enctype="multipart/form-data">
+                <input type="hidden" name="csrf" value="<?php  echo $_SESSION['token']; ?>" />
                   <div class="row">
                     <div class="col-md-4 col-sm-12 col-xs-12 mb-2 ">
                         <label class="inputLable">
