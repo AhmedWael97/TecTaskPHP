@@ -33,6 +33,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ) {
     $file_name =  time() . "_" . basename($_FILES["image"]["name"]);
     $uploadedFile = $dir . $file_name;
     
+    // Check file size
+    if ($_FILES["image"]["size"] > (2 * 1024 * 1024)) {
+         $validatedData = false;
+         $message = "Max size 2MB";
+         return;
+    }
     move_uploaded_file($_FILES["image"]["tmp_name"],$uploadedFile);
 
     $query = "insert into users (first_name, last_name, image_path) values ('".$_REQUEST['first_name']."' ,'".$_REQUEST['second_name']."', '".$uploadedFile."' )";
@@ -46,6 +52,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ) {
    } else {
       $message = "failed";
    }
+
+   return;
 
 }
 
